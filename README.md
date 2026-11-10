@@ -57,6 +57,19 @@ single <canvas> for confetti.
 - Use a system serif font stack or one subsetted font. No heavy web fonts.
 - Fully responsive. Design for ~390px wide first, then scale up gracefully.
 
+## Configuration
+
+The Google Form & Google Sheet CSV configuration block lives at the very top of [`script.js`](file:///c:/Users/Abiodun/Desktop/birthday-site/script.js#L1-L6):
+
+```javascript
+const CONFIG = {
+  FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLSfm-AXMSEtLmFb0CFwkSK8PC6xc2uHRBPumOTMDPB-w2NPKQg/formResponse",
+  ENTRY_NAME: "entry.1909405241",
+  ENTRY_MESSAGE: "entry.454516565",
+  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYtblVzJasxOOWU0N5wVrUjtB0eXmbjkIt8l4jAZ9i_86N78V_l33vTCYYU9-ea485sB1gTaJKAr7X/pub?gid=1356376876&single=true&output=csv"
+};
+```
+
 ## Deliverable
 
 index.html, style.css, script.js in the project root, plus a short note on

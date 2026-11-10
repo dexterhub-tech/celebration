@@ -117,10 +117,80 @@
   <!-- AUDIO (silent until step 4) -->
   <audio id="soundtrack" src="assets/audio/soundtrack.mp3" loop preload="none"></audio>
 
-  <!-- REPLAY BUTTON -->
-  <button id="replay-btn" aria-label="Replay the birthday surprise">
-    ↺ Replay
+  <!-- ═══════════════════════════════════════════
+       WISHES FEATURE (Sticky Notes & Modals)
+  ═══════════════════════════════════════════ -->
+
+  <!-- WISH STACK (bottom-left) -->
+  <div id="wishes-stack" class="wishes-stack" role="button" tabindex="0" aria-label="Read birthday wishes">
+    <!-- Injected dynamically by JS -->
+  </div>
+
+  <!-- FLOATING COMMENT BUTTON (bottom-right) -->
+  <button id="wishes-btn" class="wishes-fab" aria-label="Send a birthday wish">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      <line x1="12" y1="8" x2="12" y2="14"></line>
+      <line x1="9" y1="11" x2="15" y2="11"></line>
+    </svg>
   </button>
+
+  <!-- FORM MODAL -->
+  <div id="wish-form-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-backdrop" data-close-form></div>
+    <div class="wish-form-dialog" role="dialog" aria-labelledby="form-modal-title">
+      <button type="button" class="modal-close-btn" data-close-form aria-label="Close form">&times;</button>
+      <div class="sticky-pin" aria-hidden="true"></div>
+      <h2 id="form-modal-title">Send Pastor Timi a Wish 🎈</h2>
+      <form id="wish-form" novalidate autocomplete="off">
+        <div class="form-group">
+          <label for="wish-name">Your Name</label>
+          <input type="text" id="wish-name" name="name" maxlength="30" required placeholder="e.g. Deaconess Mary" />
+        </div>
+        <div class="form-group">
+          <label for="wish-message">Birthday Wish</label>
+          <textarea id="wish-message" name="message" maxlength="200" rows="3" required placeholder="Happy Birthday, Pastor Timi! Wishing you..."></textarea>
+          <div class="char-counter"><span id="char-count">0</span> / 200</div>
+        </div>
+        <div id="form-cooldown-msg" class="cooldown-msg" aria-live="polite"></div>
+        <button type="submit" id="wish-submit-btn" class="wish-submit-btn">
+          <span class="btn-text">Send Wish 💌</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- VIEWER MODAL -->
+  <div id="wish-viewer-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-backdrop" data-close-viewer></div>
+    <div class="wish-viewer-dialog" role="dialog" aria-label="View birthday wish">
+      <button type="button" class="modal-close-btn" data-close-viewer aria-label="Close viewer">&times;</button>
+
+      <div class="viewer-card-wrapper">
+        <div id="viewer-card" class="viewer-sticky-note">
+          <div class="sticky-pin" aria-hidden="true"></div>
+          <div class="viewer-content">
+            <h3 id="viewer-name" class="viewer-author"></h3>
+            <p id="viewer-message" class="viewer-text"></p>
+          </div>
+          <div class="viewer-meta">
+            <span id="viewer-time" class="viewer-timestamp"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="viewer-nav">
+        <button type="button" id="viewer-prev" class="viewer-nav-btn" aria-label="Newer wish">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span id="viewer-counter" class="viewer-counter">1 of 1</span>
+        <button type="button" id="viewer-next" class="viewer-nav-btn" aria-label="Older wish">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
