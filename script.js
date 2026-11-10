@@ -76,6 +76,8 @@ const CONFIG = {
     resizeCanvas();
     heading.classList.remove('visible');
     giftArea.classList.remove('slid-down');
+    giftArea.classList.remove('fade-out');
+    giftArea.style.display = '';
     giftWrap.classList.remove('jolting');
     giftLid.classList.remove('popped');
     giftLid.classList.remove('idle');
@@ -307,9 +309,9 @@ const CONFIG = {
   }
 
   // =================================================================
-  // BALLOONS (FLOATING & DRAGGABLE) — 4 to 5 balloons max
+  // BALLOONS (FLOATING & DRAGGABLE) — 4 balloons
   // =================================================================
-  const BALLOON_COUNT = reduced ? 4 : 5;
+  const BALLOON_COUNT = 4;
 
   function makeDraggable(balloonEl) {
     let isDragging = false;
@@ -370,9 +372,8 @@ const CONFIG = {
     const positions = [
       { left: 7,  top: 14, size: 68 }, // upper left
       { left: 81, top: 12, size: 72 }, // upper right
-      { left: 6,  top: 56, size: 64 }, // lower left
-      { left: 83, top: 54, size: 68 }, // lower right
-      { left: 48, top: 82, size: 64 }, // bottom center
+      { left: 6,  top: 58, size: 64 }, // lower left
+      { left: 83, top: 56, size: 68 }, // lower right
     ];
 
     const count = Math.min(positions.length, BALLOON_COUNT);
@@ -478,6 +479,14 @@ const CONFIG = {
     await dropPhoto(photoLeft,   0);
     await dropPhoto(photoRight,  300);
     await dropPhoto(photoCenter, 300);
+
+    // Remove the gift box totally once the images appear
+    giftArea.classList.add('fade-out');
+    setTimeout(() => {
+      if (giftArea.classList.contains('fade-out')) {
+        giftArea.style.display = 'none';
+      }
+    }, 550);
 
     // ── STEP 4: MUSIC + FALLING CONFETTI ──────────────────────
     await delay(500);
