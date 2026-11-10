@@ -25,7 +25,6 @@ const CONFIG = {
 
   // Wishes DOM refs
   const wishesStack     = document.getElementById('wishes-stack');
-  const wishesBtnWrap   = document.getElementById('wishes-btn-wrap');
   const wishesBtn       = document.getElementById('wishes-btn');
   const formModal       = document.getElementById('wish-form-modal');
   const viewerModal     = document.getElementById('wish-viewer-modal');
@@ -97,10 +96,7 @@ const CONFIG = {
       wishesStack.classList.remove('visible');
       wishesStack.style.display = 'none';
     }
-    if (wishesBtnWrap) {
-      wishesBtnWrap.classList.remove('visible');
-      wishesBtnWrap.style.display = 'none';
-    } else if (wishesBtn) {
+    if (wishesBtn) {
       wishesBtn.classList.remove('visible');
       wishesBtn.style.display = 'none';
     }
@@ -311,9 +307,9 @@ const CONFIG = {
   }
 
   // =================================================================
-  // BALLOONS (FLOATING & DRAGGABLE)
+  // BALLOONS (FLOATING & DRAGGABLE) — 4 to 5 balloons max
   // =================================================================
-  const BALLOON_COUNT = reduced ? 4 : 8;
+  const BALLOON_COUNT = reduced ? 4 : 5;
 
   function makeDraggable(balloonEl) {
     let isDragging = false;
@@ -372,14 +368,11 @@ const CONFIG = {
     clearBalloons();
 
     const positions = [
-      { left: 6,  top: 14, size: 68 },
-      { left: 82, top: 10, size: 74 },
-      { left: 5,  top: 42, size: 64 },
-      { left: 84, top: 40, size: 70 },
-      { left: 9,  top: 72, size: 66 },
-      { left: 80, top: 68, size: 72 },
-      { left: 48, top: 80, size: 65 },
-      { left: 24, top: 85, size: 58 },
+      { left: 7,  top: 14, size: 68 }, // upper left
+      { left: 81, top: 12, size: 72 }, // upper right
+      { left: 6,  top: 56, size: 64 }, // lower left
+      { left: 83, top: 54, size: 68 }, // lower right
+      { left: 48, top: 82, size: 64 }, // bottom center
     ];
 
     const count = Math.min(positions.length, BALLOON_COUNT);
@@ -504,14 +497,11 @@ const CONFIG = {
     if (wishesStack) {
       wishesStack.style.display = 'block';
     }
-    if (wishesBtnWrap) {
-      wishesBtnWrap.style.display = 'flex';
-    } else if (wishesBtn) {
+    if (wishesBtn) {
       wishesBtn.style.display = 'flex';
     }
     requestAnimationFrame(() => {
       if (wishesStack) wishesStack.classList.add('visible');
-      if (wishesBtnWrap) wishesBtnWrap.classList.add('visible');
       if (wishesBtn) wishesBtn.classList.add('visible');
     });
   }
