@@ -362,6 +362,7 @@ body {
 body.modal-open #stage,
 body.modal-open #confetti-canvas,
 body.modal-open #balloons,
+body.modal-open .wishes-btn-wrap,
 body.modal-open .wishes-fab,
 body.modal-open .wishes-stack {
   opacity: 0.4 !important;
@@ -372,39 +373,66 @@ body.modal-open {
   overflow: hidden !important;
 }
 
-/* Floating Action Button (bottom-right) */
-.wishes-fab {
+/* Floating Action Button & Tooltip (bottom-right) */
+.wishes-btn-wrap {
   position: fixed;
   bottom: clamp(16px, 3vh, 24px);
   right: clamp(16px, 3vw, 24px);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  color: #fff;
-  border: 2.5px solid #fff;
-  box-shadow: 0 8px 24px rgba(192, 57, 43, 0.45), 0 2px 6px rgba(0,0,0,0.15);
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  gap: 10px;
   z-index: 100;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: scale(0.6);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(10px) scale(0.95);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   -webkit-tap-highlight-color: transparent;
 }
-.wishes-fab.visible {
+.wishes-btn-wrap.visible {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: scale(1);
+  transform: translateY(0) scale(1);
+}
+
+.wishes-tooltip {
+  background: #111111;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wishes-fab {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 .wishes-fab:hover, .wishes-fab:focus-visible {
   transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 12px 28px rgba(192, 57, 43, 0.55);
+  background: #1f2937;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
   outline: none;
 }
 .wishes-fab:active {
@@ -611,10 +639,11 @@ body.modal-open {
 .wish-form-dialog {
   position: relative;
   width: min(92vw, 380px);
-  background: linear-gradient(145deg, #fffde7 0%, #fef9c3 60%, #fef08a 100%);
-  border-radius: 8px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   padding: 28px 22px 22px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
   transform: scale(0.92);
   transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
   z-index: 10;
@@ -628,7 +657,7 @@ body.modal-open {
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 1.25rem;
   font-weight: 800;
-  color: #713f12;
+  color: #111827;
   margin-bottom: 16px;
   text-align: center;
 }
@@ -639,10 +668,10 @@ body.modal-open {
 
 .form-group label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #78350f;
-  margin-bottom: 4px;
+  color: #374151;
+  margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -650,35 +679,35 @@ body.modal-open {
 .form-group input,
 .form-group textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1.5px solid #d97706;
+  background: #ffffff !important;
+  border: 1.5px solid #d1d5db;
   border-radius: 6px;
-  padding: 9px 12px;
+  padding: 10px 12px;
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 0.95rem;
-  color: #1f2937;
+  color: #111827;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
-  background: #fff;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+  background: #ffffff !important;
 }
 
 .char-counter {
   text-align: right;
   font-size: 0.75rem;
-  color: #92400e;
-  margin-top: 3px;
+  color: #6b7280;
+  margin-top: 4px;
   font-weight: 600;
 }
 
 .cooldown-msg {
   font-size: 0.85rem;
-  color: var(--red);
+  color: #dc2626;
   font-weight: 600;
   margin-bottom: 10px;
   text-align: center;
@@ -687,23 +716,24 @@ body.modal-open {
 
 .wish-submit-btn {
   width: 100%;
-  background: var(--red);
-  color: #fff;
+  background: #000000;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.35);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 .wish-submit-btn:hover {
-  background: #a93226;
+  background: #1f2937;
   transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 .wish-submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }

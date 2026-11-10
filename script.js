@@ -25,6 +25,7 @@ const CONFIG = {
 
   // Wishes DOM refs
   const wishesStack     = document.getElementById('wishes-stack');
+  const wishesBtnWrap   = document.getElementById('wishes-btn-wrap');
   const wishesBtn       = document.getElementById('wishes-btn');
   const formModal       = document.getElementById('wish-form-modal');
   const viewerModal     = document.getElementById('wish-viewer-modal');
@@ -96,7 +97,10 @@ const CONFIG = {
       wishesStack.classList.remove('visible');
       wishesStack.style.display = 'none';
     }
-    if (wishesBtn) {
+    if (wishesBtnWrap) {
+      wishesBtnWrap.classList.remove('visible');
+      wishesBtnWrap.style.display = 'none';
+    } else if (wishesBtn) {
       wishesBtn.classList.remove('visible');
       wishesBtn.style.display = 'none';
     }
@@ -500,11 +504,14 @@ const CONFIG = {
     if (wishesStack) {
       wishesStack.style.display = 'block';
     }
-    if (wishesBtn) {
+    if (wishesBtnWrap) {
+      wishesBtnWrap.style.display = 'flex';
+    } else if (wishesBtn) {
       wishesBtn.style.display = 'flex';
     }
     requestAnimationFrame(() => {
       if (wishesStack) wishesStack.classList.add('visible');
+      if (wishesBtnWrap) wishesBtnWrap.classList.add('visible');
       if (wishesBtn) wishesBtn.classList.add('visible');
     });
   }
@@ -864,10 +871,11 @@ const CONFIG = {
     renderWishStack();
 
     wishForm.reset();
+    wishNameInput.value = 'Dexterhub';
     charCountEl.textContent = '0';
     closeModal(formModal);
     submitBtn.disabled = false;
-    btnText.textContent = 'Send Wish 💌';
+    btnText.textContent = 'Send Wish';
 
     const topNote = wishesStack.querySelector('.stack-note:last-child');
     if (topNote) {
