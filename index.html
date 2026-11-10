@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#ffffff" />
   <title>Happy Birthday, Pastor Timi, Sir!</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2.2" />
 </head>
 <body>
 
@@ -119,15 +119,16 @@
 
   <!-- ═══════════════════════════════════════════
        WISHES FEATURE (Sticky Notes & Modals)
+       Hidden by default until all animation is done
   ═══════════════════════════════════════════ -->
 
   <!-- WISH STACK (bottom-left) -->
-  <div id="wishes-stack" class="wishes-stack" role="button" tabindex="0" aria-label="Read birthday wishes">
+  <div id="wishes-stack" class="wishes-stack" style="display: none;" role="button" tabindex="0" aria-label="Read birthday wishes">
     <!-- Injected dynamically by JS -->
   </div>
 
   <!-- FLOATING COMMENT BUTTON (bottom-right) -->
-  <button id="wishes-btn" class="wishes-fab" aria-label="Send a birthday wish">
+  <button id="wishes-btn" class="wishes-fab" style="display: none;" aria-label="Send a birthday wish">
     <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       <line x1="12" y1="8" x2="12" y2="14"></line>
@@ -136,7 +137,7 @@
   </button>
 
   <!-- FORM MODAL -->
-  <div id="wish-form-modal" class="modal-overlay" aria-hidden="true">
+  <div id="wish-form-modal" class="modal-overlay" style="display: none;" aria-hidden="true">
     <div class="modal-backdrop" data-close-form></div>
     <div class="wish-form-dialog" role="dialog" aria-labelledby="form-modal-title">
       <button type="button" class="modal-close-btn" data-close-form aria-label="Close form">&times;</button>
@@ -161,7 +162,7 @@
   </div>
 
   <!-- VIEWER MODAL -->
-  <div id="wish-viewer-modal" class="modal-overlay" aria-hidden="true">
+  <div id="wish-viewer-modal" class="modal-overlay" style="display: none;" aria-hidden="true">
     <div class="modal-backdrop" data-close-viewer></div>
     <div class="wish-viewer-dialog" role="dialog" aria-label="View birthday wish">
       <button type="button" class="modal-close-btn" data-close-viewer aria-label="Close viewer">&times;</button>
@@ -192,6 +193,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2.2"></script>
 </body>
 </html>

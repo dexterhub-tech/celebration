@@ -90,6 +90,19 @@ const CONFIG = {
     giftArea.style.opacity    = '';
     giftLid.style.animation   = '';
     giftLid.style.opacity     = '';
+
+    // Hide wishes UI on initial load (only shows after animations finish)
+    if (wishesStack) {
+      wishesStack.classList.remove('visible');
+      wishesStack.style.display = 'none';
+    }
+    if (wishesBtn) {
+      wishesBtn.classList.remove('visible');
+      wishesBtn.style.display = 'none';
+    }
+    if (formModal) closeModal(formModal);
+    if (viewerModal) closeModal(viewerModal);
+
     clearBalloons();
     stopConfetti();
     stopMusic();
@@ -477,6 +490,23 @@ const CONFIG = {
     // ── STEP 5: BALLOONS ──────────────────────────────────────
     await delay(1800);
     spawnBalloons();
+
+    // ── STEP 6: WISHES UI (Revealed only after all animation is complete) ──
+    await delay(1600);
+    showWishesUI();
+  }
+
+  function showWishesUI() {
+    if (wishesStack) {
+      wishesStack.style.display = 'block';
+    }
+    if (wishesBtn) {
+      wishesBtn.style.display = 'flex';
+    }
+    requestAnimationFrame(() => {
+      if (wishesStack) wishesStack.classList.add('visible');
+      if (wishesBtn) wishesBtn.classList.add('visible');
+    });
   }
 
   // =================================================================
@@ -756,15 +786,25 @@ const CONFIG = {
   }
 
   function openModal(modal) {
+    if (!modal) return;
+    modal.style.display = 'flex';
+    void modal.offsetWidth; // force reflow for smooth transition
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
   }
 
   function closeModal(modal) {
+    if (!modal) return;
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
-    if (!formModal.classList.contains('open') && !viewerModal.classList.contains('open')) {
+    setTimeout(() => {
+      if (!modal.classList.contains('open')) {
+        modal.style.display = 'none';
+      }
+    }, 250);
+    if ((!formModal || !formModal.classList.contains('open')) &&
+        (!viewerModal || !viewerModal.classList.contains('open'))) {
       document.body.classList.remove('modal-open');
     }
   }
