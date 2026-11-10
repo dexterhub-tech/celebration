@@ -282,49 +282,127 @@
   }
 
   // =================================================================
-  // BALLOONS
+  // BALLOONS (FLOATING & DRAGGABLE)
   // =================================================================
-  const BALLOON_COUNT = reduced ? 4 : 7;
+  const BALLOON_COUNT = reduced ? 4 : 8;
 
-  function spawnBalloon(index) {
-    const el   = document.createElement('div');
-    el.className = 'balloon';
+  function makeDraggable(balloonEl) {
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let initLeft = 0, initTop = 0;
 
-    // Build SVG use
-    el.innerHTML = `<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="30" cy="35" rx="26" ry="30" fill="#e74c3c"/>
-      <ellipse cx="20" cy="22" rx="8" ry="6" fill="rgba(255,255,255,0.3)"/>
-      <path d="M28 65 Q30 70 32 65" stroke="#c0392b" stroke-width="2" fill="#c0392b"/>
-      <path d="M30 67 Q25 78 30 90" stroke="#888" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-    </svg>`;
+    balloonEl.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      isDragging = true;
+      balloonEl.classList.add('dragging');
+      balloonEl.setPointerCapture(e.pointerId);
 
-    const size  = 50 + Math.random() * 30; // 50–80 px wide
-    const leftPct = 5 + (index / BALLOON_COUNT) * 90; // spread across width
-    const delay = index * (reduced ? 400 : 300);       // stagger
-    const duration = reduced ? 0 : (12000 + Math.random() * 6000);
-    const sway  = (Math.random() > 0.5 ? 1 : -1) * (10 + Math.random() * 20);
+      startX = e.clientX;
+      startY = e.clientY;
 
-    el.style.cssText = `
-      width: ${size}px;
-      left: ${leftPct}%;
-      top: -${size * 1.6}px;
-      --sway: ${sway}px;
-      animation: balloon-float ${duration}ms ${delay}ms ease-in-out forwards;
-      opacity: 0;
-    `;
+      const rect = balloonEl.getBoundingClientRect();
+      initLeft = rect.left;
+      initTop = rect.top;
 
-    if (reduced) {
-      // just show them statically scattered
-      el.style.top  = `${10 + Math.random() * 60}%`;
-      el.style.opacity = '0.85';
-      el.style.animation = 'none';
+      balloonEl.style.left = `${initLeft}px`;
+      balloonEl.style.top = `${initTop}px`;
+      e.preventDefault();
+    });
+
+    balloonEl.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      let newLeft = initLeft + dx;
+      let newTop = initTop + dy;
+
+      const w = balloonEl.offsetWidth || 60;
+      const h = balloonEl.offsetHeight || 90;
+      newLeft = Math.max(4, Math.min(window.innerWidth - w - 4, newLeft));
+      newTop = Math.max(4, Math.min(window.innerHeight - h - 4, newTop));
+
+      balloonEl.style.left = `${newLeft}px`;
+      balloonEl.style.top = `${newTop}px`;
+    });
+
+    function stopDrag(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      balloonEl.classList.remove('dragging');
+      try {
+        balloonEl.releasePointerCapture(e.pointerId);
+      } catch (_) {}
     }
 
-    balloonsDiv.appendChild(el);
+    balloonEl.addEventListener('pointerup', stopDrag);
+    balloonEl.addEventListener('pointercancel', stopDrag);
   }
 
   function spawnBalloons() {
-    for (let i = 0; i < BALLOON_COUNT; i++) spawnBalloon(i);
+    clearBalloons();
+
+    // Natural distributed positions around the screen
+    const positions = [
+      { left: 6,  top: 14, size: 68 },  // top left
+      { left: 82, top: 10, size: 74 },  // top right
+      { left: 5,  top: 42, size: 64 },  // mid left
+      { left: 84, top: 40, size: 70 },  // mid right
+      { left: 9,  top: 72, size: 66 },  // lower left
+      { left: 80, top: 68, size: 72 },  // lower right
+      { left: 48, top: 80, size: 65 },  // bottom center
+      { left: 24, top: 85, size: 58 },  // bottom left-ish
+    ];
+
+    const count = Math.min(positions.length, BALLOON_COUNT);
+
+    for (let i = 0; i < count; i++) {
+      const pos = positions[i];
+      const el = document.createElement('div');
+      el.className = 'balloon';
+
+      const swayX = (Math.random() > 0.5 ? 1 : -1) * (10 + Math.random() * 14);
+      const swayY = -(18 + Math.random() * 22);
+      const swayRot = (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 5);
+      const bobDur = 4.5 + Math.random() * 3.5;
+      const bobDelay = -(Math.random() * 5);
+
+      el.style.width = `${pos.size}px`;
+      el.style.left = `${pos.left}%`;
+      el.style.top = `${pos.top}%`;
+      el.style.setProperty('--sway-x', `${swayX}px`);
+      el.style.setProperty('--sway-y', `${swayY}px`);
+      el.style.setProperty('--sway-rot', `${swayRot}deg`);
+      el.style.setProperty('--bob-duration', `${bobDur}s`);
+      el.style.setProperty('--bob-delay', `${bobDelay}s`);
+
+      const gradId = `b-grad-${i}-${Math.floor(Math.random() * 10000)}`;
+      el.innerHTML = `
+        <div class="balloon-inner">
+          <svg viewBox="0 0 70 110" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="${gradId}" cx="35%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#ff7675"/>
+                <stop offset="35%" stop-color="#e74c3c"/>
+                <stop offset="85%" stop-color="#c0392b"/>
+                <stop offset="100%" stop-color="#962d22"/>
+              </radialGradient>
+            </defs>
+            <path d="M35 73 Q24 85 40 96 T34 112" stroke="#888" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <polygon points="31,71 39,71 37,76 33,76" fill="#962d22"/>
+            <ellipse cx="35" cy="40" rx="30" ry="35" fill="url(#${gradId})"/>
+            <ellipse cx="24" cy="26" rx="9" ry="6" fill="rgba(255,255,255,0.42)" transform="rotate(-25 24 26)"/>
+          </svg>
+        </div>
+      `;
+
+      balloonsDiv.appendChild(el);
+      makeDraggable(el);
+
+      setTimeout(() => {
+        el.classList.add('visible');
+      }, i * 140);
+    }
   }
 
   function clearBalloons() {
@@ -378,14 +456,7 @@
     // ── STEP 3: PHOTOS DROP ────────────────────────────────────
     await delay(400); // let heading settle
 
-    // Position photos absolutely within the stage (left anchor = 50%)
-    photoLeft.style.left   = '50%';
-    photoLeft.style.bottom = '230px';
-    photoCenter.style.left = '50%';
-    photoCenter.style.bottom = '230px';
-    photoRight.style.left  = '50%';
-    photoRight.style.bottom = '230px';
-
+    // Drop photos sequentially (CSS handles positioning and bounce)
     await dropPhoto(photoLeft,   0);
     await dropPhoto(photoCenter, 300);
     await dropPhoto(photoRight,  300);
