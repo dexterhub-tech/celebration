@@ -1,0 +1,357 @@
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #c0392b;
+  --red-bright: #e74c3c;
+  --stage-width: min(100vw, 480px);
+  --heading-h: 160px;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* prevent scroll during animation; re-enabled by JS if needed */
+}
+
+body {
+  background: #fff;
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ============================================================
+   CONFETTI CANVAS
+   ============================================================ */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   STAGE
+   ============================================================ */
+#stage {
+  position: relative;
+  width: var(--stage-width);
+  height: 100dvh;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* ============================================================
+   HEADING
+   ============================================================ */
+#heading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding-top: 28px;
+  z-index: 10;
+  pointer-events: none;
+
+  /* hidden by default — JS adds .visible class */
+  opacity: 0;
+  transform: translateY(80px) scale(0.6);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+#heading.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+#happy, #birthday {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 900;
+  font-size: clamp(3rem, 14vw, 4.5rem);
+  line-height: 1;
+  color: var(--red);
+  -webkit-text-stroke: 2px white;
+  text-shadow:
+    1px 1px 0 white,
+    -1px -1px 0 white,
+    2px 2px 6px rgba(0,0,0,0.12);
+  letter-spacing: 0.02em;
+}
+
+#subtitle {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 5.5vw, 1.6rem);
+  color: #111;
+  margin-top: 4px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* ============================================================
+   PHOTO STACK
+   ============================================================ */
+#photo-stack {
+  position: absolute;
+  bottom: 220px;
+  left: 0;
+  right: 0;
+  height: 260px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 8;
+}
+
+.photo-wrap {
+  position: absolute;
+  /* each photo starts off-screen above */
+  transform: translateY(-140vh);
+  transition: none;
+  border-radius: 2px;
+  /* polaroid shadow */
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+}
+
+.photo-wrap img {
+  display: block;
+  width: 180px;
+  height: auto;
+  border-radius: 2px;
+  user-select: none;
+}
+
+/* Final resting positions set by JS after landing */
+#photo-left  { z-index: 6; }
+#photo-center{ z-index: 8; }
+#photo-right { z-index: 7; }
+
+/* Landing bounce animation */
+@keyframes photo-land-center {
+  0%   { transform: translateX(-50%) translateY(-140vh) rotate(0deg); }
+  60%  { transform: translateX(-50%) translateY(-18px) rotate(0deg); }
+  80%  { transform: translateX(-50%) translateY(6px)   rotate(0deg); }
+  92%  { transform: translateX(-50%) translateY(-4px)  rotate(0deg); }
+  100% { transform: translateX(-50%) translateY(-10px) rotate(0deg); }
+}
+
+@keyframes photo-land-left {
+  0%   { transform: translateX(-38%) translateY(-140vh) rotate(-8deg); }
+  60%  { transform: translateX(-38%) translateY(-12px)  rotate(-8deg); }
+  80%  { transform: translateX(-38%) translateY(4px)    rotate(-8deg); }
+  92%  { transform: translateX(-38%) translateY(-3px)   rotate(-8deg); }
+  100% { transform: translateX(-38%) translateY(0)      rotate(-8deg); }
+}
+
+@keyframes photo-land-right {
+  0%   { transform: translateX(5%) translateY(-140vh) rotate(7deg); }
+  60%  { transform: translateX(5%) translateY(-12px)  rotate(7deg); }
+  80%  { transform: translateX(5%) translateY(4px)    rotate(7deg); }
+  92%  { transform: translateX(5%) translateY(-3px)   rotate(7deg); }
+  100% { transform: translateX(5%) translateY(0)      rotate(7deg); }
+}
+
+#photo-left.landed {
+  animation: photo-land-left 0.65s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+#photo-center.landed {
+  animation: photo-land-center 0.65s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+#photo-right.landed {
+  animation: photo-land-right 0.65s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+
+/* ============================================================
+   GIFT AREA
+   ============================================================ */
+#gift-area {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 15;
+}
+
+#gift-wrap {
+  position: relative;
+  width: 120px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+#gift-wrap:focus-visible {
+  outline: 3px dashed var(--red);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+/* Stack lid on top of box */
+#gift-lid {
+  display: block;
+  width: 120px;
+  position: absolute;
+  bottom: 92px; /* sits right on top of the box */
+  left: 0;
+  transform-origin: 50% 100%;
+  transition: none;
+}
+
+#gift-box {
+  display: block;
+  width: 120px;
+}
+
+/* Idle wiggle on the lid */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  25%       { transform: rotate(-4deg) translateY(-2px); }
+  75%       { transform: rotate(4deg)  translateY(-2px); }
+}
+
+#gift-lid.idle {
+  animation: wiggle 2.4s ease-in-out infinite;
+}
+
+/* Lid pop-off: spins up and flies away */
+@keyframes lid-pop {
+  0%   { transform: rotate(0deg) translateY(0) scale(1); opacity: 1; }
+  30%  { transform: rotate(-40deg) translateY(-60px) scale(1.05); opacity: 1; }
+  100% { transform: rotate(-340deg) translateY(-220px) translateX(60px) scale(0.7); opacity: 0; }
+}
+
+#gift-lid.popped {
+  animation: lid-pop 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Box jolt */
+@keyframes box-jolt {
+  0%   { transform: translateY(0) scale(1); }
+  20%  { transform: translateY(-8px) scale(1.04,0.96); }
+  40%  { transform: translateY(4px) scale(0.97,1.03); }
+  60%  { transform: translateY(-3px) scale(1.02,0.98); }
+  80%  { transform: translateY(2px) scale(0.99,1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+#gift-wrap.jolting {
+  animation: box-jolt 0.5s ease forwards;
+}
+
+/* Pulse hint */
+@keyframes pulse-hint {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.95); }
+}
+
+#tap-hint {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: #555;
+  animation: pulse-hint 2s ease-in-out infinite;
+  user-select: none;
+}
+
+#tap-hint.hidden { display: none; }
+
+/* After burst, slide gift area out */
+#gift-area.burst-done {
+  pointer-events: none;
+  animation: gift-sink 0.8s 0.5s forwards ease-in;
+}
+
+@keyframes gift-sink {
+  to { transform: translateX(-50%) translateY(140px); opacity: 0; }
+}
+
+/* ============================================================
+   BALLOONS
+   ============================================================ */
+#balloons {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.balloon {
+  position: absolute;
+  color: var(--red-bright);
+  opacity: 0;
+  /* JS will set top/left/width and start the animation */
+}
+
+.balloon svg {
+  width: 100%;
+  height: auto;
+}
+
+@keyframes balloon-float {
+  0%   { transform: translateY(-15%) translateX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translateY(10%) translateX(var(--sway, 18px)); opacity: 1; }
+  100% { transform: translateY(100vh) translateX(0); opacity: 0.7; }
+}
+
+@keyframes balloon-sway {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(var(--sway, 18px)); }
+}
+
+/* ============================================================
+   REPLAY BUTTON
+   ============================================================ */
+#replay-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(6px);
+  border: 1.5px solid #ccc;
+  border-radius: 999px;
+  padding: 8px 22px;
+  font-size: 0.88rem;
+  color: #444;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s, background 0.2s, color 0.2s;
+  letter-spacing: 0.03em;
+}
+
+#replay-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#replay-btn:hover, #replay-btn:focus-visible {
+  background: #fff;
+  color: var(--red);
+  border-color: var(--red);
+  outline: none;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  #gift-lid.idle        { animation: none; }
+  #gift-lid.popped      { opacity: 0; transition: opacity 0.3s; }
+  #gift-wrap.jolting    { animation: none; }
+  #photo-left.landed    { animation: none; transform: translateX(-38%) translateY(0) rotate(-8deg) !important; }
+  #photo-center.landed  { animation: none; transform: translateX(-50%) translateY(-10px) rotate(0deg) !important; }
+  #photo-right.landed   { animation: none; transform: translateX(5%) translateY(0) rotate(7deg) !important; }
+  .balloon              { animation: none !important; opacity: 0.9 !important; }
+  #heading              { transition: opacity 0.3s; }
+}

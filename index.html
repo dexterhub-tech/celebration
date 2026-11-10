@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Happy Birthday, Pastor Timi, Sir!</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       CONFETTI CANVAS (behind everything)
+  ═══════════════════════════════════════════ -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- ═══════════════════════════════════════════
+       STAGE — all content lives here
+  ═══════════════════════════════════════════ -->
+  <main id="stage">
+
+    <!-- HEADING (hidden until burst) -->
+    <header id="heading" aria-live="polite" aria-atomic="true">
+      <h1 id="happy">HAPPY</h1>
+      <h1 id="birthday">BIRTHDAY</h1>
+      <p id="subtitle">Pastor Timi, Sir!</p>
+    </header>
+
+    <!-- PHOTO STACK -->
+    <section id="photo-stack" aria-label="Photos of Pastor Timi">
+      <div class="photo-wrap" id="photo-left">
+        <img
+          src="assets/images/celebrant-2-left.webp"
+          alt="Pastor Timi"
+          width="260" height="300"
+          loading="eager"
+          draggable="false"
+        />
+      </div>
+      <div class="photo-wrap" id="photo-center">
+        <img
+          src="assets/images/celebrant-1-top-center.webp"
+          alt="Pastor Timi smiling"
+          width="260" height="300"
+          loading="eager"
+          draggable="false"
+        />
+      </div>
+      <div class="photo-wrap" id="photo-right">
+        <img
+          src="assets/images/celebrant-3-right.webp"
+          alt="Pastor Timi"
+          width="260" height="300"
+          loading="eager"
+          draggable="false"
+        />
+      </div>
+    </section>
+
+    <!-- GIFT BOX (SVG, interactive) -->
+    <div id="gift-area">
+      <div id="gift-wrap" role="button" tabindex="0"
+           aria-label="Tap the gift to open">
+
+        <!-- LID -->
+        <svg id="gift-lid" viewBox="0 0 120 48" xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <!-- lid base -->
+          <rect x="4" y="18" width="112" height="30" rx="3" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/>
+          <!-- red ribbon vertical on lid -->
+          <rect x="55" y="18" width="10" height="30" fill="#c0392b"/>
+          <!-- bow left loop -->
+          <ellipse cx="45" cy="18" rx="18" ry="10" fill="#e74c3c" transform="rotate(-20 45 18)"/>
+          <!-- bow right loop -->
+          <ellipse cx="75" cy="18" rx="18" ry="10" fill="#e74c3c" transform="rotate(20 75 18)"/>
+          <!-- bow center knot -->
+          <ellipse cx="60" cy="18" rx="8" ry="6" fill="#c0392b"/>
+          <!-- bow ribbon ends -->
+          <path d="M55 24 Q40 38 30 48" stroke="#e74c3c" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M65 24 Q80 38 90 48" stroke="#e74c3c" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>
+
+        <!-- BOX BODY -->
+        <svg id="gift-box" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <!-- box body -->
+          <rect x="4" y="0" width="112" height="96" rx="3" fill="#f0f0f0" stroke="#ddd" stroke-width="1"/>
+          <!-- red ribbon vertical -->
+          <rect x="55" y="0" width="10" height="96" fill="#c0392b"/>
+          <!-- red ribbon horizontal -->
+          <rect x="4" y="40" width="112" height="10" fill="#c0392b"/>
+        </svg>
+      </div>
+
+      <p id="tap-hint">Tap the gift to open</p>
+    </div>
+
+    <!-- BALLOON CONTAINER -->
+    <div id="balloons" aria-hidden="true"></div>
+
+  </main>
+
+  <!-- SVG BALLOON SYMBOL (not rendered, used as template) -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="balloon-sym" viewBox="0 0 60 90">
+      <!-- balloon body -->
+      <ellipse cx="30" cy="35" rx="26" ry="30" fill="currentColor"/>
+      <!-- highlight -->
+      <ellipse cx="20" cy="22" rx="8" ry="6" fill="rgba(255,255,255,0.3)"/>
+      <!-- knot -->
+      <path d="M28 65 Q30 70 32 65" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+      <!-- string -->
+      <path d="M30 67 Q25 78 30 90" stroke="#888" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <!-- AUDIO (silent until step 4) -->
+  <audio id="soundtrack" src="assets/audio/soundtrack.mp3" loop preload="none"></audio>
+
+  <!-- REPLAY BUTTON -->
+  <button id="replay-btn" aria-label="Replay the birthday surprise">
+    ↺ Replay
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
