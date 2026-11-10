@@ -871,7 +871,6 @@ const CONFIG = {
     renderWishStack();
 
     wishForm.reset();
-    wishNameInput.value = 'Dexterhub';
     charCountEl.textContent = '0';
     closeModal(formModal);
     submitBtn.disabled = false;
